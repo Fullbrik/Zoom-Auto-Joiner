@@ -16,7 +16,7 @@ How it works:
     ]
 }
 ```
-* Launch autojoiner.py with the file as the command line argument:
+* Launch autojoiner.py with the schedule config file as the command line argument:
 
 ```
 autojoiner.py path/to/file.json
