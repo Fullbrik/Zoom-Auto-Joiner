@@ -2,9 +2,7 @@
 Automatically join zoom classes
 
 How it works:
-* Create a data folder in the root directory (next to src).
-* Put a test-classes.json file in it.
-* Format it as so (in json format): 
+* Create a json file on your computer and format it as so: 
 
 ```
 {
@@ -17,4 +15,9 @@ How it works:
         }
     ]
 }
+```
+* Launch autojoiner.py with the file as the command line argument:
+
+```
+autojoiner.py path/to/file.json
 ```

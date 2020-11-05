@@ -1,3 +1,4 @@
+import sys;
 import os;
 import json;
 from datetime import date, datetime
@@ -6,7 +7,15 @@ import pathlib
 def launchZoom(id, password):
     os.system('start "" "zoommtg://zoom.us/join?confno=' + id + '&pwd=' + password + '"')
 
-with open(str(pathlib.Path(__file__).parent.absolute()) + "\\..\\data\\test-classes.json") as f:
+if(len(sys.argv) <= 1):
+    raise Exception('No schedule config file provided in the command line :(');
+
+if(not os.path.exists(sys.argv[1])):
+    raise Exception('Could not find file ' + sys.argv[1] + '.')
+
+print('loading file: ' + sys.argv[1])
+
+with open(sys.argv[1]) as f:
     data = json.load(f)
 
 lastJoinedTime = ""
