@@ -1,0 +1,25 @@
+.new-schedule {
+    background-color: white;
+    padding: 50px;
+}
+
+.new-schedule label{
+    margin-right: 10px;
+}
+
+.new-schedule input{
+    width: 100%;
+}
+
+.new-schedule button{
+    width: 100%;
+}
+
+.new-schedule .back{
+    width: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}

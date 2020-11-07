@@ -1,0 +1,30 @@
+/* content of this box will be centered horizontally */
+.absolute-center-horizontal
+{
+  /* background-color: rgba(0, 127, 255, 0.2); */
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* content of this box will be centered vertically */
+.absolute-center-vertical
+{
+  /* background-color: rgba(255, 0, 0, 0.2); */
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* content of this box will be centered horizontally and vertically */
+ .absolute-center
+{
+  /* background-color: lightblue; */
+  padding: 3em;
+}

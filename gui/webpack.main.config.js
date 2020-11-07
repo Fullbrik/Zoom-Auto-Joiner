@@ -11,4 +11,10 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json']
   },
+  output: {
+    publicPath: '/'
+  },
+  devServer: {
+    historyApiFallback: true,
+  }
 };
