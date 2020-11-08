@@ -6,7 +6,7 @@ import AbsoluteCenter from "../absolute-center";
 import "./selector.css";
 
 export default function ScheduleSelectorScreen(): ReactElement {
-	const { files, addFile } = useContext(RecentFilesContext);
+	const { files } = useContext(RecentFilesContext);
 
 	return (
 		<AbsoluteCenter>

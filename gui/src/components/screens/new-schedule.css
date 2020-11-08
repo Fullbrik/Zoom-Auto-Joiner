@@ -23,3 +23,13 @@
     padding-right: 10px;
     margin-bottom: 10px;
 }
+
+.new-schedule .path-select{
+    width: auto;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.new-schedule #path{
+    flex: 1;
+}

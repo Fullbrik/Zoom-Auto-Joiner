@@ -1,4 +1,4 @@
-import React, { createContext, ReactElement, useState } from "react";
+import React, { createContext, ReactElement, useEffect, useState } from "react";
 
 interface IRecentFilesContext {
 	files: string[];
@@ -14,8 +14,17 @@ export default function RecentFilesProvider({ children }: any): ReactElement {
 	const [files, setFiles] = useState<string[]>([]);
 
 	const addFile = (file: string) => {
-		setFiles([...files, file]);
+		if (!files.includes(file)) setFiles([...files, file]);
 	};
+
+	useEffect(() => {
+		if (files.length <= 0) {
+			var newFiles: string[] = JSON.parse(localStorage.getItem("recent-files"));
+			if (newFiles != null && newFiles.length > 0) setFiles(newFiles);
+		} else {
+			localStorage.setItem("recent-files", JSON.stringify(files));
+		}
+	}, [files]);
 
 	return (
 		<RecentFilesContext.Provider value={{ files, addFile }}>
