@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
-import { writeFile } from "fs";
+import { readFile, writeFile } from "fs";
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -58,10 +58,17 @@ ipcMain.handle("create-file", (event, name: string, path: string) => {
 		var fileName = path + "/" + name + ".schedule";
 
 		writeFile(fileName, "{}", (err) => {
-      if(err == null)
-        res(fileName)
-			else
-        rej(err);
+			if (err == null) res(fileName);
+			else rej(err);
+		});
+	});
+});
+
+ipcMain.handle("read-file", async (event, path: string) => {
+	return new Promise((res, rej) => {
+		readFile(path, (err, data) => {
+			if (err == null) res(data);
+			else rej(err);
 		});
 	});
 });

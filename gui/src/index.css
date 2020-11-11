@@ -5,11 +5,11 @@
 body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
 		Arial, sans-serif;
+	background-color: gray;
 }
 
 .app {
 	height: 100vh;
-	background-color: gray;
 }
 
 button,
@@ -35,4 +35,29 @@ a:hover {
 button:active,
 a:active {
 	background-color: grey;
+}
+
+.disabled{
+    background-color: lightgrey;
+    color: gray;
+}
+
+.disabled:hover{
+    background-color: lightgrey;
+    color: gray;
+}
+
+.disabled:active{
+    background-color: lightgrey;
+    color: gray;
+}
+
+
+.back{
+    width: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
 }

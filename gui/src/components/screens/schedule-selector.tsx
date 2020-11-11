@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { RecentFilesContext } from "../../contexts/recent-files";
 import AbsoluteCenter from "../absolute-center";
 import "./selector.css";
+import { ConfigFileContext } from "../../contexts/config-file";
 
 export default function ScheduleSelectorScreen(): ReactElement {
 	const { files } = useContext(RecentFilesContext);
+	const { openFile } = useContext(ConfigFileContext);
 
 	return (
 		<AbsoluteCenter>
@@ -17,7 +19,13 @@ export default function ScheduleSelectorScreen(): ReactElement {
 						<ul>
 							{files.map((file, index) => (
 								<li key={index}>
-									<button>{file}</button>
+									<button
+										onClick={() => {
+											openFile(file);
+										}}
+									>
+										{file}
+									</button>
 								</li>
 							))}
 						</ul>

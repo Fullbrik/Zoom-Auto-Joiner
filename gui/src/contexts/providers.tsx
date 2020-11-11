@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import ConfigFileProvider from './config-file'
 import RecentFilesProvider from './recent-files'
 
 interface Props {
@@ -8,7 +9,9 @@ interface Props {
 export default function Providers({children}: Props): ReactElement {
     return (
         <RecentFilesProvider>
-            {children}
+            <ConfigFileProvider>
+                {children}
+            </ConfigFileProvider>
         </RecentFilesProvider>
     )
 }

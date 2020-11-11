@@ -15,15 +15,6 @@
     width: 100%;
 }
 
-.new-schedule .back{
-    width: auto;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 10px;
-}
-
 .new-schedule .path-select{
     width: auto;
     padding-top: 1px;

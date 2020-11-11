@@ -1,0 +1,43 @@
+.calendar{
+    padding: 2px;
+    background-color: black;
+}
+
+.calendar .times {
+    background-color: grey;
+}
+
+.calendar .times th {
+    background-color: grey;
+}
+
+.calendar tr{
+    padding: 0;
+}
+
+.calendar th{
+    padding: 0;
+    background-color: white;
+    border: none;
+    outline: none;
+}
+
+.calendar select{
+    border: none;
+    outline: none;
+    text-align: center;
+    min-width: auto;
+    /* width: 100%; */
+}
+
+.calendar button{
+    height: 100%;
+}
+
+.calendar .add-class{
+    padding: 0;
+}
+
+.add-time{
+    flex: 1;
+}
