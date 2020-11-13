@@ -1,4 +1,15 @@
 .calendar{
+    border: 1px solid black;
+    background-color: black;
+}
+
+.calendar th{
+    padding: 10px;
+    border: 1px solid black;
+    background-color: white;
+}
+
+/* .calendar{
     padding: 2px;
     background-color: black;
 }
@@ -27,7 +38,7 @@
     outline: none;
     text-align: center;
     min-width: auto;
-    /* width: 100%; */
+    /* width: 100%;
 }
 
 .calendar button{
@@ -40,4 +51,4 @@
 
 .add-time{
     flex: 1;
-}
+} */

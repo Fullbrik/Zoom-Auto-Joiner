@@ -34,7 +34,7 @@ export default function Calendar({
 	setClassForTimeSlotForDayAtIndex,
 	addDay,
 	removeLastTime,
-	removeLastDay
+	removeLastDay,
 }: Props): ReactElement {
 	return (
 		<Column>
@@ -42,24 +42,64 @@ export default function Calendar({
 			<Row>
 				<table className="calendar">
 					<tbody>
-						<tr className="times">
-							<th>Times:</th>
+						<tr>
+							<th className="day">Times</th>
+							<th className="day">Sunday</th>
+							<th className="day">Monday</th>
+							<th className="day">Tuesday</th>
+							<th className="day">Wednesday</th>
+							<th className="day">Thursday</th>
+							<th className="day">Friday</th>
+							<th className="day">Saturday</th>
+						</tr>
+						{times.map((time, time_index) => {
+							return (
+								<tr key={time_index}>
+									<th>
+										<TimePicker
+											showSecond={false}
+											value={time}
+											onChange={(m) => setTimeAtIndex(time_index, m)}
+											allowEmpty={false}
+										></TimePicker>
+									</th>
+									{new Array<Day>()
+										.concat(
+											...weekdays.map((weekday) =>
+												days.filter((day) => day.day === weekday)
+											)
+										)
+										.map((day) => day.classes)
+										.map((day) => (
+											<th>
+												<select value={day}>
+													{classNames.map((cls) => (
+														<option>{cls}</option>
+													))}
+												</select>
+											</th>
+										))}
+								</tr>
+							);
+						})}
+						{/* <th className="times">
+							<tr>Times:</tr>
 							{times.map((time, index) => {
 								return (
-									<th key={index}>
+									<tr key={index}>
 										<TimePicker
 											showSecond={false}
 											value={time}
 											onChange={(m) => setTimeAtIndex(index, m)}
 										></TimePicker>
-									</th>
+									</tr>
 								);
 							})}
-						</tr>
+						</th>
 						{days.map((day, index) => {
 							return (
-								<tr key={index}>
-									<th>
+								<th key={index}>
+									<tr>
 										<select
 											value={day.day}
 											onChange={(e) =>
@@ -70,10 +110,10 @@ export default function Calendar({
 												return <option key={day}>{day}</option>;
 											})}
 										</select>
-									</th>
+									</tr>
 									{day.classes.map((cls, timeSlot) => {
 										return (
-											<th key={timeSlot}>
+											<tr key={timeSlot}>
 												<select
 													value={cls}
 													onChange={(e) => {
@@ -88,11 +128,11 @@ export default function Calendar({
 														<option>{cls}</option>
 													))}
 												</select>
-											</th>
+											</tr>
 										);
 									})}
 									{day.classes.length < times.length ? (
-										<th>
+										<tr>
 											<button
 												className="add-class"
 												onClick={() => {
@@ -101,11 +141,11 @@ export default function Calendar({
 											>
 												+
 											</button>
-										</th>
+										</tr>
 									) : null}
-								</tr>
+								</th>
 							);
-						})}
+						})} */}
 					</tbody>
 				</table>
 				<Column>
