@@ -7,7 +7,7 @@ import { ConfigFileContext } from "../../contexts/config-file";
 import AbsoluteCenter from "../absolute-center";
 import { Column, Row } from "../layout";
 import "./edit-config.css";
-import Day from "../../models/day";
+import Days from "../../models/day";
 import Calendar from "../calendar";
 import Classes from "../classes";
 import ClassData from "../../models/class";
@@ -21,34 +21,34 @@ export default function EditConfigScreen(): ReactElement {
 		{ class: "Free Period", id: "", password: "" },
 	]);
 
-	const [days, setDays] = useState<Day[]>([]);
+	const [days, setDays] = useState<Days>({}});
 
 	const [times, setTimes] = useState<moment.Moment[]>([]);
 
-	useEffect(() => {
-		setDays(
-			days.map<Day>((day) => {
-				if (day.classes.length > times.length)
-					return {
-						day: day.day,
-						classes: day.classes.filter((_v, i) => i < times.length),
-					};
-				else if (day.classes.length < times.length)
-					return {
-						day: day.day,
-						classes: [
-							...day.classes,
-							...new Array(times.length - day.classes.length).fill(
-								classes[0].class,
-								0,
-								times.length
-							),
-						],
-					};
-				else return day;
-			})
-		);
-	}, [times]);
+	// useEffect(() => {
+	// 	setDays(
+	// 		days.map<Day>((day) => {
+	// 			if (day.classes.length > times.length)
+	// 				return {
+	// 					day: day.day,
+	// 					classes: day.classes.filter((_v, i) => i < times.length),
+	// 				};
+	// 			else if (day.classes.length < times.length)
+	// 				return {
+	// 					day: day.day,
+	// 					classes: [
+	// 						...day.classes,
+	// 						...new Array(times.length - day.classes.length).fill(
+	// 							classes[0].class,
+	// 							0,
+	// 							times.length
+	// 						),
+	// 					],
+	// 				};
+	// 			else return day;
+	// 		})
+	// 	);
+	// }, [times]);
 
 	/* add function */
 	const addNewTime = () => {

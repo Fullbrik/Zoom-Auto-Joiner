@@ -3,8 +3,11 @@
     background-color: black;
 }
 
-.calendar th{
+.calendar .day{
     padding: 10px;
+}
+
+.calendar th{
     border: 1px solid black;
     background-color: white;
 }
@@ -33,13 +36,13 @@
     outline: none;
 }
 
-.calendar select{
+*/.calendar select{
     border: none;
     outline: none;
     text-align: center;
-    min-width: auto;
-    /* width: 100%;
-}
+    min-width: min-content;
+    max-width: 100%;
+}/*
 
 .calendar button{
     height: 100%;
