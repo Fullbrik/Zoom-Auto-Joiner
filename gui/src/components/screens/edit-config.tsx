@@ -38,11 +38,16 @@ export default function EditConfigScreen(): ReactElement {
 	useEffect(() => {
 		loadData()
 			.then((data) => {
-				setClasses(data.classes);
-				setDays(new Days(data.schedule.days));
-				setTimes(
-					data.schedule.times.map((time: moment.MomentInput) => moment(time))
-				);
+				setClasses(data.classes ?? []);
+				if (data.schedule != null) {
+					if (data.schedule.days != null) setDays(new Days(data.schedule.days));
+					if (data.schedule.times != null)
+						setTimes(
+							data.schedule.times.map((time: moment.MomentInput) =>
+								moment(time)
+							)
+						);
+				}
 			})
 			.catch((err) => {
 				if (path != null && path.length > 0) alert(err);

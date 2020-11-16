@@ -1,7 +1,7 @@
 import { ipcRenderer } from "electron";
 import { OpenDialogReturnValue } from "electron/main";
 import React, { ReactElement, useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import bind from "../../2waybind";
 import { RecentFilesContext } from "../../contexts/recent-files";
 import AbsoluteCenter from "../absolute-center";
@@ -14,6 +14,7 @@ export default function NewScheduleScreen({}: Props): ReactElement {
 	const { files, addFile } = useContext(RecentFilesContext);
 	const [name, setName] = useState("Schedule" + files.length);
 	const [path, setPath] = useState("");
+	const [didSubmit, setDidSubmit] = useState(false);
 
 	return (
 		<AbsoluteCenter>
@@ -22,14 +23,20 @@ export default function NewScheduleScreen({}: Props): ReactElement {
 				onSubmit={async (e) => {
 					e.preventDefault();
 					try {
-						var file : string = await ipcRenderer.invoke("create-file", name, path);
+						var file: string = await ipcRenderer.invoke(
+							"create-file",
+							name,
+							path
+						);
 						addFile(file);
+						setDidSubmit(true);
 					} catch (error) {
 						throw error;
 					}
 					console.log(file);
 				}}
 			>
+				{didSubmit ? <Redirect to="/"></Redirect> : null}
 				<Link to="/" className="back">
 					{"<"}
 				</Link>
