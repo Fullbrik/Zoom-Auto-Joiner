@@ -1,8 +1,14 @@
 import moment from "moment";
 import TimePicker from "rc-time-picker";
-import React, { ReactElement, useContext, useEffect, useState } from "react";
+import React, {
+	ReactElement,
+	Component,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import Select from "react-dropdown-select";
-import weekdays, { nextWeekday } from "../../weekdays";
+import weekdays from "../../weekdays";
 import { ConfigFileContext } from "../../contexts/config-file";
 import AbsoluteCenter from "../absolute-center";
 import { Column, Row } from "../layout";
@@ -12,61 +18,45 @@ import Calendar from "../calendar";
 import Classes from "../classes";
 import ClassData from "../../models/class";
 import { createDataFrom } from "../../dataManagement";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import useForceUpdate from "use-force-update";
 
 export default function EditConfigScreen(): ReactElement {
-	const { path, data } = useContext(ConfigFileContext);
+	const { path, saveData, loadData } = useContext(ConfigFileContext);
 
 	const [classes, setClasses] = useState<ClassData[]>([
 		{ class: "Free Period", id: "", password: "" },
 	]);
 
-	const [days, setDays] = useState<Days>({}});
+	const [days, setDays] = useState<Days>(new Days());
 
 	const [times, setTimes] = useState<moment.Moment[]>([]);
 
-	// useEffect(() => {
-	// 	setDays(
-	// 		days.map<Day>((day) => {
-	// 			if (day.classes.length > times.length)
-	// 				return {
-	// 					day: day.day,
-	// 					classes: day.classes.filter((_v, i) => i < times.length),
-	// 				};
-	// 			else if (day.classes.length < times.length)
-	// 				return {
-	// 					day: day.day,
-	// 					classes: [
-	// 						...day.classes,
-	// 						...new Array(times.length - day.classes.length).fill(
-	// 							classes[0].class,
-	// 							0,
-	// 							times.length
-	// 						),
-	// 					],
-	// 				};
-	// 			else return day;
-	// 		})
-	// 	);
-	// }, [times]);
+	const forceUpdate = useForceUpdate();
+
+	useEffect(() => {
+		loadData()
+			.then((data) => {
+				setClasses(data.classes);
+				setDays(new Days(data.schedule.days));
+				setTimes(
+					data.schedule.times.map((time: moment.MomentInput) => moment(time))
+				);
+			})
+			.catch((err) => {
+				if (path != null && path.length > 0) alert(err);
+			});
+		return () => {};
+	}, []);
+
+	useEffect(() => {
+		days.setTimesCount(times.length, classes[0].class);
+	}, [times]);
 
 	/* add function */
 	const addNewTime = () => {
 		setTimes([...times, moment()]);
-	};
-	const addDay = () => {
-		if (days.length < 7)
-			setDays([
-				...days,
-				{
-					day: nextWeekday(days[days.length - 1]),
-					classes: new Array(times.length).fill(
-						classes[0].class,
-						0,
-						times.length
-					),
-				},
-			]);
 	};
 	const addClass = () => {
 		setClasses([
@@ -78,9 +68,6 @@ export default function EditConfigScreen(): ReactElement {
 	/* remove functions */
 	const removeLastTime = () => {
 		setTimes(times.filter((_t, i) => i !== times.length - 1));
-	};
-	const removeLastDay = () => {
-		setDays(days.filter((_v, i) => i !== days.length - 1));
 	};
 	const removeClassAtIndex = (index: number) => {
 		if (classes.length > 1) setClasses(classes.filter((_v, i) => i !== index));
@@ -95,44 +82,29 @@ export default function EditConfigScreen(): ReactElement {
 			})
 		);
 	};
-	const setWeekdayForDayAtIndex = (index: number, weekday: string) => {
-		setDays(
-			days.map((v, i) => {
-				return index === i ? { day: weekday, classes: v.classes } : v;
-			})
-		);
-	};
-	const setClassForTimeSlotForDayAtIndex = (
-		dayIndex: number,
-		timeSlot: number,
-		className: string
-	) => {
-		setDays(
-			days.map((d, i) =>
-				dayIndex === i
-					? {
-							day: d.day,
-							classes: d.classes.map((c, ii) =>
-								ii === timeSlot ? className : c
-							),
-					  }
-					: d
-			)
-		);
-	};
+
 	const setClassAtIndex = (index: number, data: ClassData) => {
 		setClasses(classes.map((v, i) => (index === i ? data : v)));
 	};
-
-	/* add at index */
-	const addClassForDayAtIndex = (index: number) => {
-		setDays(
-			days.map((v, i) => {
-				return index === i
-					? { day: v.day, classes: [...v.classes, classes[0].class] }
-					: v;
-			})
-		);
+	const setClassAtIndexAtDay = (
+		weekday: string,
+		timeIndex: number,
+		value: string
+	) => {
+		if (
+			weekday == "sunday" ||
+			weekday == "monday" ||
+			weekday == "tuesday" ||
+			weekday == "wednesday" ||
+			weekday == "thursday" ||
+			weekday == "friday" ||
+			weekday == "saturday"
+		) {
+			var newDays = days;
+			newDays[weekday][timeIndex] = value;
+			setDays(newDays);
+			forceUpdate();
+		}
 	};
 
 	/* getters */
@@ -150,13 +122,15 @@ export default function EditConfigScreen(): ReactElement {
 		console.log(path);
 
 		var data = createDataFrom(classes, days, times);
-		var fileText = JSON.stringify(data);
-		console.log(fileText);
+		console.log(data);
+		// setData(data);
+		saveData(data);
 	};
 
 	/* JSX */
 	return (
 		<AbsoluteCenter>
+			{path == null || path.length <= 0 ? <Redirect to="/" /> : null}
 			<div className="edit-config">
 				<Link to="/" className="back">
 					{"<"}
@@ -164,29 +138,36 @@ export default function EditConfigScreen(): ReactElement {
 				<h1>Edit schedule</h1>
 				<h4 className="path-name">{path}</h4>
 				<br></br>
-				<Row>
-					<Classes
-						classes={classes}
-						addClass={addClass}
-						setClassAtIndex={setClassAtIndex}
-						removeClassAtIndex={removeClassAtIndex}
-					></Classes>
-					<hr className="divider"></hr>
-					<Calendar
-						times={times}
-						days={days}
-						classNames={getClassNames()}
-						addNewTime={addNewTime}
-						setTimeAtIndex={setTimeAtIndex}
-						addDay={addDay}
-						setWeekdayForDayAtIndex={setWeekdayForDayAtIndex}
-						setClassForTimeSlotForDayAtIndex={setClassForTimeSlotForDayAtIndex}
-						addClassForDayAtIndex={addClassForDayAtIndex}
-						removeLastTime={removeLastTime}
-						removeLastDay={removeLastDay}
-					></Calendar>
-				</Row>
-				<br></br>
+				<Tabs>
+					<TabList>
+						<Tab>Classes</Tab>
+						<Tab>Schedule</Tab>
+					</TabList>
+					<TabPanel>
+						<Classes
+							classes={classes}
+							addClass={addClass}
+							setClassAtIndex={setClassAtIndex}
+							removeClassAtIndex={removeClassAtIndex}
+						></Classes>
+					</TabPanel>
+					<TabPanel>
+						<Calendar
+							times={times}
+							days={days}
+							classNames={getClassNames()}
+							addNewTime={addNewTime}
+							setTimeAtIndex={setTimeAtIndex}
+							setClassAtIndexAtDay={setClassAtIndexAtDay}
+							// addDay={addDay}
+							// setWeekdayForDayAtIndex={setWeekdayForDayAtIndex}
+							// setClassForTimeSlotForDayAtIndex={setClassForTimeSlotForDayAtIndex}
+							// addClassForDayAtIndex={addClassForDayAtIndex}
+							removeLastTime={removeLastTime}
+							// removeLastDay={removeLastDay}
+						></Calendar>
+					</TabPanel>
+				</Tabs>
 				<button
 					onClick={() => {
 						save();

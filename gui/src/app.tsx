@@ -6,6 +6,7 @@ import NewScheduleScreen from "./components/screens/new-schedule";
 import ScheduleSelectorScreen from "./components/screens/schedule-selector";
 import Providers from "./contexts/providers";
 import './time-picker.css';
+import './tabs.css';
 
 export default function init(): void {
 	ReactDOM.render(

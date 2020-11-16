@@ -1,28 +1,35 @@
 import ClassData from "./models/class";
-import Day from "./models/day";
+import Days from "./models/day";
 import weekdays from "./weekdays";
 
 export function createDataFrom(
 	classes: ClassData[],
-	days: Day[],
+	days: Days,
 	times: moment.Moment[]
 ) {
+	const getClass = (className: String) => {
+		return classes.find((cls) => cls.class == className);
+	}
+
 	const getDay = (day: string) => {
-		var filteredDays = days
-			.filter((d) => d.day === day)
-			.map((d) => d.classes)
-			.map((classNames) => {
-				return classNames.map((className, index) => {
-					var classData = classes.find((cls) => cls.class == className);
-
-					return {
-						time: times[index].format("hh:mm"),
-						...classData,
-					};
-				});
-			});
-
-		return [].concat(...filteredDays);
+		if (
+			day == "sunday" ||
+			day == "monday" ||
+			day == "tuesday" ||
+			day == "wednesday" ||
+			day == "thursday" ||
+			day == "friday" ||
+			day == "saturday"
+		) {
+			return days[day].map((cls, index) => ({
+				class: cls,
+				time: times[index].format("HH:mm"),
+				...getClass(cls)
+			}));
+		}
+		else{
+			return [];
+		}
 	};
 
 	var daysObj: any = {};
@@ -35,8 +42,8 @@ export function createDataFrom(
 		classes,
 		schedule: {
 			days,
-			times
+			times,
 		},
-		...daysObj
+		...daysObj,
 	};
 }

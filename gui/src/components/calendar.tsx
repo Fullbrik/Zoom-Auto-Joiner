@@ -1,7 +1,7 @@
 import TimePicker from "rc-time-picker";
 import React, { ReactElement } from "react";
 import weekdays from "../weekdays";
-import Day from "../models/day";
+import Days from "../models/day";
 import { Column, Row } from "./layout";
 import "./calendar.css";
 
@@ -10,17 +10,9 @@ interface Props {
 	addNewTime: () => void;
 	removeLastTime: () => void;
 	setTimeAtIndex: (index: number, moment: moment.Moment) => void;
-	days: Day[];
-	addDay: () => void;
-	removeLastDay: () => void;
-	setWeekdayForDayAtIndex: (index: number, weekday: string) => void;
+	setClassAtIndexAtDay: (weekday: string, timeIndex: number, value: string) => void;
+	days: Days;
 	classNames: string[];
-	addClassForDayAtIndex: (index: number) => void;
-	setClassForTimeSlotForDayAtIndex: (
-		dayIndex: number,
-		timeSlot: number,
-		className: string
-	) => void;
 }
 
 export default function Calendar({
@@ -28,18 +20,15 @@ export default function Calendar({
 	addNewTime,
 	setTimeAtIndex,
 	days,
-	setWeekdayForDayAtIndex,
 	classNames,
-	addClassForDayAtIndex,
-	setClassForTimeSlotForDayAtIndex,
-	addDay,
 	removeLastTime,
-	removeLastDay,
-}: Props): ReactElement {
+	setClassAtIndexAtDay
+}:
+Props): ReactElement {
 	return (
 		<Column>
 			<h2>Schedule</h2>
-			<Row>
+			<Row className="calendar-parent">
 				<table className="calendar">
 					<tbody>
 						<tr>
@@ -63,18 +52,13 @@ export default function Calendar({
 											allowEmpty={false}
 										></TimePicker>
 									</th>
-									{new Array<Day>()
-										.concat(
-											...weekdays.map((weekday) =>
-												days.filter((day) => day.day === weekday)
-											)
-										)
-										.map((day) => day.classes)
-										.map((day) => (
-											<th>
-												<select value={day}>
+									{weekdays
+										.map((weekday) => days.getDay(weekday)[time_index])
+										.map((cls, index) => (
+											<th key={index}>
+												<select value={cls} onChange={(e) => setClassAtIndexAtDay(weekdays[index], time_index, e.target.value)}>
 													{classNames.map((cls) => (
-														<option>{cls}</option>
+														<option key={cls}>{cls}</option>
 													))}
 												</select>
 											</th>
@@ -82,98 +66,16 @@ export default function Calendar({
 								</tr>
 							);
 						})}
-						{/* <th className="times">
-							<tr>Times:</tr>
-							{times.map((time, index) => {
-								return (
-									<tr key={index}>
-										<TimePicker
-											showSecond={false}
-											value={time}
-											onChange={(m) => setTimeAtIndex(index, m)}
-										></TimePicker>
-									</tr>
-								);
-							})}
-						</th>
-						{days.map((day, index) => {
-							return (
-								<th key={index}>
-									<tr>
-										<select
-											value={day.day}
-											onChange={(e) =>
-												setWeekdayForDayAtIndex(index, e.target.value)
-											}
-										>
-											{weekdays.map((day) => {
-												return <option key={day}>{day}</option>;
-											})}
-										</select>
-									</tr>
-									{day.classes.map((cls, timeSlot) => {
-										return (
-											<tr key={timeSlot}>
-												<select
-													value={cls}
-													onChange={(e) => {
-														setClassForTimeSlotForDayAtIndex(
-															index,
-															timeSlot,
-															e.target.value
-														);
-													}}
-												>
-													{classNames.map((cls) => (
-														<option>{cls}</option>
-													))}
-												</select>
-											</tr>
-										);
-									})}
-									{day.classes.length < times.length ? (
-										<tr>
-											<button
-												className="add-class"
-												onClick={() => {
-													addClassForDayAtIndex(index);
-												}}
-											>
-												+
-											</button>
-										</tr>
-									) : null}
-								</th>
-							);
-						})} */}
 					</tbody>
 				</table>
-				<Column>
-					<button onClick={() => addNewTime()} className="add-time">
-						+
-					</button>
-					<button
-						onClick={() => removeLastTime()}
-						className={"add-time" + (times.length <= 0 ? " disabled" : "")}
-					>
-						-
-					</button>
-				</Column>
 			</Row>
 			<Row>
-				<button
-					className={days.length >= 7 ? "disabled" : ""}
-					onClick={() => {
-						addDay();
-					}}
-				>
+				<button onClick={() => addNewTime()} className="add-time">
 					+
 				</button>
 				<button
-					className={days.length <= 0 ? "disabled" : ""}
-					onClick={() => {
-						removeLastDay();
-					}}
+					onClick={() => removeLastTime()}
+					className={"add-time" + (times.length <= 0 ? " disabled" : "")}
 				>
 					-
 				</button>

@@ -64,10 +64,19 @@ ipcMain.handle("create-file", (event, name: string, path: string) => {
 	});
 });
 
-ipcMain.handle("read-file", async (event, path: string) => {
+ipcMain.handle("read-file", (event, path: string) => {
 	return new Promise((res, rej) => {
-		readFile(path, (err, data) => {
+		readFile(path, {encoding: 'utf8'}, (err, data) => {
 			if (err == null) res(data);
+			else rej(err);
+		});
+	});
+});
+
+ipcMain.handle("save-file", async (event, path: string, text: string) => {
+	return new Promise((res, rej) => {
+		writeFile(path, text, (err) => {
+			if (err == null) res();
 			else rej(err);
 		});
 	});
