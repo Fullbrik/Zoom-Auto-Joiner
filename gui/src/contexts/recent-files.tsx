@@ -14,6 +14,9 @@ export default function RecentFilesProvider({ children }: any): ReactElement {
 	const [files, setFiles] = useState<string[]>([]);
 
 	const addFile = (file: string) => {
+		if (process.platform === "win32") file = file.replace("/", "\\");
+		else file = file.replace("\\", "/");
+		
 		if (!files.includes(file)) setFiles([...files, file]);
 	};
 

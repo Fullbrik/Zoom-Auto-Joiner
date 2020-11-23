@@ -5,9 +5,10 @@ import { RecentFilesContext } from "../../contexts/recent-files";
 import AbsoluteCenter from "../absolute-center";
 import "./selector.css";
 import { ConfigFileContext } from "../../contexts/config-file";
+import { ipcRenderer } from "electron";
 
 export default function ScheduleSelectorScreen(): ReactElement {
-	const { files } = useContext(RecentFilesContext);
+	const { files, addFile } = useContext(RecentFilesContext);
 	const { openFile } = useContext(ConfigFileContext);
 
 	return (
@@ -39,7 +40,19 @@ export default function ScheduleSelectorScreen(): ReactElement {
 								<Link to="/new">New</Link>
 							</li>
 							<li>
-								<button>Open</button>
+								<button
+									onClick={async () => {
+										var file: Electron.OpenDialogReturnValue = await ipcRenderer.invoke(
+											"open-file-dialog"
+										);
+										if (!file.canceled && file.filePaths.length > 0) {
+											addFile(file.filePaths[0]);
+											openFile(file.filePaths[0]);
+										}
+									}}
+								>
+									Open
+								</button>
 							</li>
 						</ul>
 					</Column>

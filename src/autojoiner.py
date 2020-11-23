@@ -30,7 +30,7 @@ def joinTodaysZoom():
     for clss in data[weekday]:
         if(clss["time"] == time and lastJoinedTime != time):
             lastJoinedTime = time
-            print("Joining class")
+            print(clss["class"])
             launchZoom(clss["id"], clss["password"])
     
 while 1:

@@ -53,6 +53,13 @@ ipcMain.handle("open-folder-dialog", async (event) => {
 	return await dialog.showOpenDialog({ properties: ["openDirectory"] });
 });
 
+ipcMain.handle("open-file-dialog", async () => {
+	return await dialog.showOpenDialog({
+		properties: ["openFile"],
+		filters: [{ name: "schedule files", extensions: ["schedule"] }],
+	});
+});
+
 ipcMain.handle("create-file", (event, name: string, path: string) => {
 	return new Promise((res, rej) => {
 		var fileName = path + "/" + name + ".schedule";
@@ -66,7 +73,7 @@ ipcMain.handle("create-file", (event, name: string, path: string) => {
 
 ipcMain.handle("read-file", (event, path: string) => {
 	return new Promise((res, rej) => {
-		readFile(path, {encoding: 'utf8'}, (err, data) => {
+		readFile(path, { encoding: "utf8" }, (err, data) => {
 			if (err == null) res(data);
 			else rej(err);
 		});
