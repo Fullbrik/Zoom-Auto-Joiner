@@ -25,16 +25,13 @@ export default function ConfigFileProvider({ children }: any): ReactElement {
 
 	const loadData = async () => {
 		var text = await ipcRenderer.invoke("read-file", path);
-		console.log(text);
 		return JSON.parse(text);
 	}
 
 	const saveData = async (data: any) => {
 		if (path == null || path.length <= 0 || data == null || data == {}) return;
 
-		console.log(data);
 		var fileText = JSON.stringify(data);
-		console.log(fileText);
 		await ipcRenderer.invoke("save-file", path, fileText);
 	};
 

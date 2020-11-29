@@ -33,7 +33,6 @@ export default function NewScheduleScreen({}: Props): ReactElement {
 					} catch (error) {
 						throw error;
 					}
-					console.log(file);
 				}}
 			>
 				{didSubmit ? <Redirect to="/"></Redirect> : null}

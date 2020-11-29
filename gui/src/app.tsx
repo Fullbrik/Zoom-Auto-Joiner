@@ -7,6 +7,7 @@ import ScheduleSelectorScreen from "./components/screens/schedule-selector";
 import Providers from "./contexts/providers";
 import './time-picker.css';
 import './tabs.css';
+import RunScreen from "./components/screens/run";
 
 export default function init(): void {
 	ReactDOM.render(
@@ -19,6 +20,9 @@ export default function init(): void {
 						</Route>
 						<Route path="/edit">
 							<EditConfigScreen />
+						</Route>
+						<Route path="/run">
+							<RunScreen />
 						</Route>
 						<Route path="/">
 							<ScheduleSelectorScreen />

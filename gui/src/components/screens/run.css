@@ -1,0 +1,15 @@
+.run-schedule{
+    background-color: white;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.run-schedule .output{
+    padding: 10px;
+    margin: 10px;
+    min-height: 20px;
+    border-radius: 10px;
+    background-color: lightgray;
+}

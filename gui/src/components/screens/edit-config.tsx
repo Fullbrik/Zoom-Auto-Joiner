@@ -124,11 +124,7 @@ export default function EditConfigScreen(): ReactElement {
 			return;
 		}
 
-		console.log(path);
-
 		var data = createDataFrom(classes, days, times);
-		console.log(data);
-		// setData(data);
 		saveData(data);
 	};
 
@@ -180,6 +176,7 @@ export default function EditConfigScreen(): ReactElement {
 				>
 					Save
 				</button>
+				{<Link to='/run'>Run</Link>}
 			</div>
 		</AbsoluteCenter>
 	);

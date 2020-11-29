@@ -28,5 +28,6 @@
 
 import './index.css';
 import init from './app';
+import { ipcRenderer } from 'electron';
 
 init();
